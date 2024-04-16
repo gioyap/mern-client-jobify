@@ -5,6 +5,9 @@ const app = express();
 import morgan from 'morgan';
 import { nanoid } from 'nanoid';
 import jobRouter from './routes/jobRouter.js'
+import mongoose from 'mongoose';
+import 'express-async-errors';
+import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 
 // try {
 //   const response = await fetch(
@@ -15,11 +18,8 @@ import jobRouter from './routes/jobRouter.js'
 // } catch (error) {
 //   console.log(error);
 // }
+const port = process.env.PORT || 5100;
 
-let jobs = [
-  { id: nanoid(), company: 'apple', position: 'front-end' },
-  { id: nanoid(), company: 'google', position: 'back-end' },
-];
 // Middleware Order: Ensure that middleware is set up before defining routes. 
 // This is to make sure that the requests are properly parsed and handled.
 //middleware setup
@@ -34,6 +34,8 @@ app.use(morgan('dev')); // it will log incoming requests to the console with col
 //routes - this is necessary to have multiple jobRouter in this order
 // place here at below, so that the create and update of job will work
 app.use('/api/v1/jobs', jobRouter);
+app.use(errorHandlerMiddleware);
+
 
 //get all 
 app.get('/', (req, res) => {
@@ -104,7 +106,16 @@ app.delete('/api/v1/jobs/:id', (req, res) => {
   res.status(200).json({ msg: 'job deleted' });
 });
 
-const port = process.env.PORT || 5100;
+// MongoDB connection and server start
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`server running on PORT ${port}...`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
 
 //not found middleware
 app.use('*', (req, res) => {
@@ -115,12 +126,4 @@ app.use((err, req, res, next) => {
   console.log(err);
   res.status(500).json({ msg: 'Invalid JSON payload' });
 });
-
-app.listen(port, () => {
-  console.log(`server running on PORT ${port}...`);
-});
-
-
-
-
 
