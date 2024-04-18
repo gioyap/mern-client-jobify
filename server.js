@@ -37,25 +37,6 @@ app.use(morgan('dev')); // it will log incoming requests to the console with col
 app.use('/api/v1/jobs', jobRouter);
 app.use(errorHandlerMiddleware);
 
-//test - express validator
-app.post(
-  '/api/v1/test',
-  [body('name').notEmpty().withMessage('name is required')],
-  (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      const errorMessages = errors.array().map((error) => error.msg);
-      return res.status(400).json({ errors: errorMessages });
-    }
-    next();
-  },
-  (req, res) => {
-    const { name } = req.body;
-    res.json({ msg: `hello ${name}` });
-  }
-);
-
-
 //get all 
 app.get('/', (req, res) => {
   res.send('Hello World');

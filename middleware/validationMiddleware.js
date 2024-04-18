@@ -1,7 +1,6 @@
 import { body, validationResult, param } from 'express-validator';
-import { BadRequestError, NotFoundError } from '../errors/customErrors';
+import { BadRequestError, NotFoundError } from '../errors/customErrors.js';
 import { JOB_STATUS, JOB_TYPE } from '../utils/constants.js';
-import { validateJobInput } from '../middleware/validationMiddleware.js';
 import mongoose from 'mongoose';
 import Job from '../models/JobModel.js';
 
@@ -40,13 +39,6 @@ export const validateJobInput = withValidationErrors([
       .withMessage('invalid status value'),
     body('jobType').isIn(Object.values(JOB_TYPE)).withMessage('invalid job type'),
   ]);
-
-  router.route('/').get(getAllJobs).post(validateJobInput, createJob);
-router
-  .route('/:id')
-  .get(getJob)
-  .patch(validateJobInput, updateJob)
-  .delete(deleteJob);
 
   export const validateIdParam = withValidationErrors([
     param('id').custom(async (value) => {
