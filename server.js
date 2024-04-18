@@ -8,7 +8,7 @@ import jobRouter from './routes/jobRouter.js'
 import mongoose from 'mongoose';
 import 'express-async-errors';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
-import { body, validationResult } from 'express-validator';
+import authRouter from './routes/authRouter.js';
 
 // try {
 //   const response = await fetch(
@@ -37,6 +37,8 @@ app.use(morgan('dev')); // it will log incoming requests to the console with col
 app.use('/api/v1/jobs', jobRouter);
 app.use(errorHandlerMiddleware);
 
+//authRouter
+app.use('/api/v1/auth', authRouter);
 //get all 
 app.get('/', (req, res) => {
   res.send('Hello World');
