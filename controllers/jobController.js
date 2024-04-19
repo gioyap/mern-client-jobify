@@ -11,6 +11,12 @@ export const getAllJobs = async (req, res) => {
     }
 };
 
+// export const getAllJobs = async (req, res) => {
+//     console.log(req);
+//     const jobs = await Job.find({});
+//     res.status(StatusCodes.OK).json({ jobs });
+//   };
+
 export const createJob = async (req, res) => {
     const { company, position } = req.body;
     try {
