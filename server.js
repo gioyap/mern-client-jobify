@@ -9,6 +9,8 @@ import mongoose from 'mongoose';
 import 'express-async-errors';
 import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import authRouter from './routes/authRouter.js';
+import cookieParser from 'cookie-parser';
+import { authenticateUser } from './middleware/authMiddleware.js';
 
 // try {
 //   const response = await fetch(
@@ -39,6 +41,13 @@ app.use(errorHandlerMiddleware);
 
 //authRouter
 app.use('/api/v1/auth', authRouter);
+
+//authmiddleware
+app.use('/api/v1/jobs', authenticateUser, jobRouter);
+
+//parser
+app.use(cookieParser());
+
 //get all 
 app.get('/', (req, res) => {
   res.send('Hello World');
