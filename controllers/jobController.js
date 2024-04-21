@@ -1,6 +1,17 @@
 import Job from '../models/JobModel.js';
 import { StatusCodes } from 'http-status-codes';
 
+export const updateUser = async (req, res) => {
+    const updatedUser = await User.findByIdAndUpdate(req.user.userId, req.body);
+    res.status(StatusCodes.OK).json({ msg: 'user updated' });
+  };
+
+export const getCurrentUser = async (req, res) => {
+    const user = await User.findOne({ _id: req.user.userId });
+    const userWithoutPassword = user.toJSON();
+    res.status(StatusCodes.OK).json({ user: userWithoutPassword });
+  };
+
 export const getAllJobs = async (req, res) => {
     try {
         const jobs = await Job.find({});
