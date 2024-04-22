@@ -11,6 +11,7 @@ import errorHandlerMiddleware from './middleware/errorHandlerMiddleware.js';
 import authRouter from './routes/authRouter.js';
 import cookieParser from 'cookie-parser';
 import { authenticateUser } from './middleware/authMiddleware.js';
+import userRouter from './routes/userRouter.js';
 
 // try {
 //   const response = await fetch(
@@ -44,6 +45,9 @@ app.use('/api/v1/auth', authRouter);
 
 //authmiddleware
 app.use('/api/v1/jobs', authenticateUser, jobRouter);
+
+//user router
+app.use('/api/v1/users', authenticateUser, userRouter);
 
 //parser
 app.use(cookieParser());
